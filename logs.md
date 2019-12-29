@@ -98,6 +98,9 @@ $ pacstrap /mnt base linux linux-firmware
 $ pacstrap /mnt man-db man-pages
 $ pacstrap /mnt vim
 $ pacstrap /mnt grub efibootmgr
+$ pacstrap /mnt bash-completion
+$ pacstrap /mnt networkmanager
+$ pacstrap /mnt gnome gdm
 
 $ genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -111,7 +114,7 @@ $ vim /etc/locale.gen
 # uncomment de_AT.UTF-8 and en_US.UTF-8
 $ locale-gen
 $ vim /etc/locale.conf
-LANG=de_AT.UTF-8
+LANG=en_US.UTF-8
 $ vim /etc/vconsole.conf
 KEYMAP=de-latin1
 
@@ -133,4 +136,21 @@ $ grub-mkconfig -o /boot/grub/grub.cfg
 $ exit
 $ umount -R /mnt
 $ reboot
+```
+
+First login (as `root` with password set before)
+and post-installations and settings
+([virtual box IP address](https://www.virtualbox.org/manual/ch09.html#changenat)):
+```bash
+$ if link set enp0s3 up
+$ vim /etc/systemd/network/enp0s3.network
+[Match]
+Name=enp0s3
+[Network]
+Address=10.0.2.15/24
+Gateway=10.0.2.2
+DNS=8.8.8.8
+DNS=8.8.4.4
+$ systemctl start systemd-networkd
+$ ping archlinux.org
 ```
